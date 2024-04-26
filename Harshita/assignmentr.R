@@ -263,3 +263,27 @@ plotly_scatter_plot <- ggplotly(scatter_plot, tooltip = "text")
 # If you're in an R environment that supports it, you can directly display the plot
 plotly_scatter_plot
 
+
+
+
+
+
+
+filtered_data <- data_join %>%
+  filter(country %in% c("Ethiopia", "Madagascar", "Cambodia", "Chad", "Niger"))
+
+# Create scatter plot with regression line with different colors for each country
+scatter_plot <- ggplot(filtered_data, aes(x = Military.expenditure....of.GDP., y = GDP.per.capita..constant.2015.US.., color = country)) +
+  geom_point() +  # Scatter plot
+  geom_smooth(method = "lm", se = FALSE, aes(group = country)) +  # Add regression line without confidence interval for each country
+  labs(x = "Military Expenditure as % of GDP", y = "GPD Per Capita", title = "Balancing Act: Military Investment and Economic Prosperity in Emerging Asian Economies") +  # Labels
+  theme_minimal() +  # Optional: Customize plot theme
+  theme(legend.position = "bottom")  # Adjust legend position
+
+# Convert to plotly for an interactive plot
+plotly_scatter_plot <- ggplotly(scatter_plot, tooltip = c("x", "y", "color"))
+
+# If you're in an R environment that supports it, you can directly display the plot
+plotly_scatter_plot
+
+

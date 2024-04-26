@@ -6,7 +6,7 @@ author: "Harshita Bhandari"
 date: "2024-04-25"
 format:
   html:
-    theme: sandstone
+    theme: lumen
     toc: true
     
 execute: 
@@ -87,35 +87,53 @@ ggplot(top_countries, aes(x = country, y = AverageDeprivation, fill = country)) 
     legend.position = "none"  # Removing the legend as it's redundant
   )
 ```
+
+
 ## Scatter Plot Explanation
 
 The scatter plot below visualizes the relationship between military expenditure as a percentage of GDP and GDP per capita for the selected countries. Each point on the plot represents a data point for one of the countries in a given year, allowing us to observe trends over time and across different levels of economic development.
 
 ## Analysis and Discussion
 
-The regression line in the scatter plot suggests a trend where countries with higher military expenditure as a percentage of GDP tend to have lower GDP per capita. This relationship might indicate that excessive military spending could be at the expense of economic growth, especially in nations where development funds are limited. However, it's also crucial to consider that high defense spending can be a response to security concerns, which might itself be a reaction to or cause of economic challenges.
+The scatter plot with regression lines for each country, the visualization uncovers patterns and raises questions:
+
+Ethiopia:
+Ethiopia, a country with historical conflicts and recent economic expansion, showcases a pattern of military spending reflective of its need to maintain national security while propelling forward its developmental agenda.
+
+Madagascar:
+Madagascar's unique position as an island nation with limited regional conflicts allows it to potentially prioritize economic development over military expansion, a hypothesis that its position on the scatter plot may support.
+
+Cambodia:
+Cambodia, with its post-conflict rebuilding phase and growing economic presence in Southeast Asia, presents an intriguing case of balancing military modernization with significant international investment in development.
+
+Chad:
+Chad's involvement in regional security initiatives in the face of economic challenges presents a complex interplay between defense commitments and the pursuit of economic stability.
+
+Niger:
+Niger faces unique security challenges with its strategic location and the threat of extremism. Its military expenditure reflects the delicate balance between ensuring security and striving towards economic development.
 
 ## Recommendations
 
 Given the observed trend, countries should evaluate the efficiency and necessity of their military budgets, especially when economic development goals remain unmet. Strategic reallocation of funds could support health, education, and infrastructure, potentially boosting economic growth more effectively than equivalent spending on defense. International cooperation and regional stability initiatives can also reduce security threats, decreasing the need for high military expenditure.
 
 Policymakers should also consider comprehensive economic reforms that balance security needs with economic development, leveraging detailed data analyses like this to guide decisions.
+
+
 ```{r}
-#scatter plot
 
 filtered_data <- data_join %>%
-  filter(
-    country %in% c( "India", "Bangladesh", "Pakistan", "Indonesia", "Philippines")) %>%
-  group_by(country)
-# Create scatter plot with regression line
-scatter_plot <- ggplot(filtered_data, aes(x = Military.expenditure....of.GDP., y = GDP.per.capita..constant.2015.US..)) +
+  filter(country %in% c("Ethiopia", "Madagascar", "Cambodia", "Chad", "Niger"))
+
+# Create scatter plot with regression line with different colors for each country
+scatter_plot <- ggplot(filtered_data, aes(x = Military.expenditure....of.GDP., y = GDP.per.capita..constant.2015.US.., color = country)) +
   geom_point() +  # Scatter plot
-  geom_smooth(method = "lm", se = FALSE) +  # Add regression line without confidence interval
-  labs(x = "Military Eexpenditure as % of GDP", y = "GPD Per Capita", title = "Scatter Plot with Regression Line") +  # Labels
-  theme_minimal()  # Optional: Customize plot theme
+  geom_smooth(method = "lm", se = FALSE, aes(group = country)) +  # Add regression line without confidence interval for each country
+  labs(x = "Military Expenditure as % of GDP", y = "GPD Per Capita", title = "Balancing Act: Military Investment and Economic Prosperity in Economies") +  # Labels
+  theme_minimal() +  # Optional: Customize plot theme
+  theme(legend.position = "bottom")  # Adjust legend position
 
 # Convert to plotly for an interactive plot
-plotly_scatter_plot <- ggplotly(scatter_plot, tooltip = "text")
+plotly_scatter_plot <- ggplotly(scatter_plot, tooltip = c("x", "y", "color"))
 
 # If you're in an R environment that supports it, you can directly display the plot
 plotly_scatter_plot
