@@ -46,7 +46,32 @@ subtitle = "Percentage of children suffering at least two deprivations")
 
 
 
+filtered_metadata <- metadata %>%
+  filter(country %in% country_list, year >= 2010 & year <= 2020) %>%
+  select(country, year, Life_expectancy_at_birth_total_years) %>%
+  mutate(year = as.integer(year))  # Make sure 'year' is an integer for plotting
 
+# Creating the time series plot with appropriate labels and color settings
+ggplot(filtered_metadata, aes(x = year, y = Life_expectancy_at_birth_total_years, group = country, color = country)) +
+  geom_line(size = 0.8) +  # Draw lines with a specified size
+  geom_point() +  # Add points to the lines
+  scale_color_manual(values = country_colors) +  # Use the specified colors for each country
+  scale_x_continuous(breaks = 2010:2020) +  # Set x-axis breaks from 2010 to 2020
+  labs(
+    title = "Life Expectancy Trends from 2010 to 2020",
+    subtitle = "Comparison among Selected African and Asian Countries",
+    x = "Year",
+    y = "Life Expectancy at Birth (Years)"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(face = "italic", size = 12),
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Set x-axis text to be slanted for better readability
+    axis.text.y = element_text(size = 12),
+    axis.title = element_text(face = "bold", size = 12)
+  )
 
 
 # bar graph
@@ -267,8 +292,6 @@ plotly_scatter_plot
 
 
 
-
-
 filtered_data <- data_join %>%
   filter(country %in% c("Ethiopia", "Madagascar", "Cambodia", "Chad", "Niger"))
 
@@ -287,3 +310,149 @@ plotly_scatter_plot <- ggplotly(scatter_plot, tooltip = c("x", "y", "color"))
 plotly_scatter_plot
 
 
+
+
+#Timeseries
+
+
+country_list <- c("Ethiopia", "Madagascar", "Cambodia", "Chad", "Niger")
+country_colors <- c("Ethiopia" = "#E41A1C", "Madagascar" = "#377EB8", "Cambodia" = "#4DAF4A", 
+                    "Chad" = "#984EA3", "Niger" = "#FFFF33")
+
+filtered_metadata <- metadata %>%
+  filter(country %in% country_list, time_period >= 2010 & time_period <= 2020) %>%
+  select(country, time_period, Life_expectancy_at_birth_total_years)
+
+filtered_metadata$time_period <- as.integer(filtered_metadata$time_period)
+
+
+
+ggplot(filtered_metadata, aes(x = time_period, y = Life_expectancy_at_birth_total_years, group = country, color = country)) +
+  geom_line(size = 0.8) +  
+  geom_point() + 
+  scale_color_manual(values = country_colors) +
+  scale_x_continuous(breaks = seq(min(filtered_metadata$time_period), max(filtered_metadata$time_period), 1)) +
+  labs(
+    title = "Life Expectancy Trends from 2010 to 2019",
+    subtitle = "Comparison among Selected Developed Countries",
+    x = "Year",
+    y = "Life Expectancy at Birth (Years)"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(face = "italic", size = 12),
+    axis.text.x = element_text(angle = 0, hjust = 1),
+    axis.text.y = element_text(size = 12),
+    axis.title = element_text(face = "bold", size = 12)
+
+
+    library(tidyverse)
+    
+    # Assuming that 'metadata' and 'country_list' are already defined as in your previous code
+    
+    # Use 'metadata' if it is already loaded with the necessary data or replace it with 'cleaned_metadata'
+    filtered_metadata <- metadata %>%
+      filter(country %in% country_list, year >= 2010 & year <= 2020) %>%
+      select(country, year, Life_expectancy_at_birth_total_years) %>%
+      mutate(year = as.integer(year))  # Make sure 'year' is an integer for plotting
+    
+    # Creating the time series plot with appropriate labels and color settings
+    ggplot(filtered_metadata, aes(x = year, y = Life_expectancy_at_birth_total_years, group = country, color = country)) +
+      geom_line(size = 0.8) +  # Draw lines with a specified size
+      geom_point() +  # Add points to the lines
+      scale_color_manual(values = country_colors) +  # Use the specified colors for each country
+      scale_x_continuous(breaks = 2010:2020) +  # Set x-axis breaks from 2010 to 2020
+      labs(
+        title = "Life Expectancy Trends from 2010 to 2020",
+        subtitle = "Comparison among Selected African and Asian Countries",
+        x = "Year",
+        y = "Life Expectancy at Birth (Years)"
+      ) +
+      theme_minimal() +
+      theme(
+        legend.position = "bottom",
+        plot.title = element_text(face = "bold", size = 14),
+        plot.subtitle = element_text(face = "italic", size = 12),
+        axis.text.x = element_text(angle = 45, hjust = 1),  # Set x-axis text to be slanted for better readability
+        axis.text.y = element_text(size = 12),
+        axis.title = element_text(face = "bold", size = 12)
+      )
+    
+    
+    country_list <- c("Ethiopia", "Madagascar", "Cambodia", "Chad", "Niger")
+    country_colors <- c("Ethiopia" = "#E41A1C", "Madagascar" = "#377EB8", "Cambodia" = "#4DAF4A", 
+                        "Chad" = "#984EA3", "Niger" = "#FFFF33")
+    
+    # Filter the data for the specified countries and years
+    filtered_data <- metadata %>%
+      filter(country %in% country_list) %>%
+      select(country, year, obs_value)  # Assuming 'year' and 'obs_value' are the correct column names
+    
+    # Convert 'year' to an integer or a Date object if necessary
+    filtered_data$year <- as.integer(filtered_data$year)
+    
+    # Create the time series plot
+    time_series_plot <- ggplot(filtered_data, aes(x = year, y = obs_value, group = country, color = country)) +
+      geom_line(size = 0.8) +  # Line for each country
+      geom_point() +  # Points for each data entry
+      scale_color_manual(values = country_colors) +  # Custom colors for each country
+      scale_x_continuous(breaks = seq(min(filtered_data$year), max(filtered_data$year), by = 1)) +  # Yearly breaks on x-axis
+      labs(
+        title = "Observation Value Trends from 2010 to 2020",
+        subtitle = "Comparison among Selected Countries",
+        x = "Year",
+        y = "Observed Value"
+      ) +
+      theme_minimal() +
+      theme(
+        legend.position = "bottom",
+        plot.title = element_text(face = "bold", size = 14),
+        plot.subtitle = element_text(face = "italic", size = 12),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 12),
+        axis.title = element_text(face = "bold", size = 12)
+      )
+    
+    # Print the plot
+    print(time_series_plot)
+   
+    
+    
+    
+    data <- read_csv("cleaned_metadata.csv")
+    
+    # Filter the data for entries with observation values above 50 and countries with enough data points
+    filtered_data <- data %>%
+      filter(obs_value > 50) %>%
+      group_by(country) %>%
+      filter(n() > threshold) %>% # Replace threshold with the minimum number of data points you want per country
+      ungroup() %>%
+      select(country, year, obs_value)
+    
+    # Plot the time series chart
+    plot <- ggplot(filtered_data, aes(x = year, y = obs_value, color = country)) +
+      geom_line() +
+      geom_point(size = 1.5, alpha = 0.8) +
+      labs(
+        title = "Time Series of Observation Values by Country",
+        x = "Year",
+        y = "Observation Value",
+        color = "Country"
+      ) +
+      theme_minimal() +
+      theme(
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.text = element_text(size = 8),
+        plot.title = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12)
+      ) +
+      guides(colour = guide_legend(override.aes = list(size=4)))
+    
+    print(plot)
+    
+    # Save the plot to a file
+    ggsave("/mnt/data/observation_values_time_series.png", plot, width = 12, height = 6)

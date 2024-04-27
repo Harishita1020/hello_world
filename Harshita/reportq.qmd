@@ -1,6 +1,6 @@
 ---
 title: "Quarto Assignment MT5000"
-subtitle: "Shadows and Light: Mapping the Landscape of Child Deprivation Worldwide"
+subtitle: "Shadows and Light: Mapping the Landscape of Child Deprivation"
 
 author: "Harshita Bhandari"
 date: "2024-04-25"
@@ -35,7 +35,7 @@ full_join(cleaned_metadata, cleaned_unicef1, by = join_by(country, year))
 full_join(cleaned_metadata, cleaned_unicef1, by = c("country" , "year" ))
 ```
 
-## Insights from the World Map
+## 1. Insights from the World Map
 The map displayed below uses a color gradient to denote the intensity of child deprivation. Darker shades indicate higher percentages of children experiencing at least two deprivations, signaling regions where child welfare needs urgent attention. This visual tool allows policymakers, researchers, and the public to identify focus areas for resource allocation and intervention efforts.
 ```{r}
 #map
@@ -53,7 +53,7 @@ ggplot(map_data_join) +
   labs(title = "Global Distribution of Child Deprivation ",  
 subtitle = "Percentage of children suffering at least two deprivations")
 ```
-## Insights from the Bar Graph
+## 2. Insights from the Bar Graph
 
 The visualization below illustrates the top ten countries facing severe child deprivation issues. Each bar represents a country and is color-coded to distinguish between them easily. The height of the bar indicates the average percentage of children suffering from at least two types of deprivation, providing a clear comparison of the severity across these nations.
 
@@ -89,7 +89,7 @@ ggplot(top_countries, aes(x = country, y = AverageDeprivation, fill = country)) 
 ```
 
 
-## Scatter Plot Explanation
+## 3. Scatter Plot Explanation
 
 The scatter plot below visualizes the relationship between military expenditure as a percentage of GDP and GDP per capita for the selected countries. Each point on the plot represents a data point for one of the countries in a given year, allowing us to observe trends over time and across different levels of economic development.
 
@@ -111,8 +111,6 @@ Chad's involvement in regional security initiatives in the face of economic chal
 
 Niger:
 Niger faces unique security challenges with its strategic location and the threat of extremism. Its military expenditure reflects the delicate balance between ensuring security and striving towards economic development.
-
-## Recommendations
 
 Given the observed trend, countries should evaluate the efficiency and necessity of their military budgets, especially when economic development goals remain unmet. Strategic reallocation of funds could support health, education, and infrastructure, potentially boosting economic growth more effectively than equivalent spending on defense. International cooperation and regional stability initiatives can also reduce security threats, decreasing the need for high military expenditure.
 
@@ -138,5 +136,49 @@ plotly_scatter_plot <- ggplotly(scatter_plot, tooltip = c("x", "y", "color"))
 # If you're in an R environment that supports it, you can directly display the plot
 plotly_scatter_plot
 ```
+
+## 4. Visualizing Population Trends:
+
+To further enrich our understanding, we now look at a time series visualization of the population totals for these countries. By observing population growth trends alongside child deprivation data, we can better comprehend the scale of the challenges faced and the progress made over time.
+
+This interactive plot allows viewers to trace the population changes over time, providing context to the severity and persistence of child deprivation issues. As the population increases, the demand for essential services such as education, healthcare, and economic opportunities also grows. The challenge is not only to reduce the percentage of children facing deprivation but also to scale these efforts effectively against a backdrop of rapid population growth.
+
+```{r}
+cleaned_metadata <- read.csv("cleaned_metadata.csv")
+    
+    # Filter data for specific countries
+    data_selected <- subset(cleaned_metadata, country %in% c("Ethiopia", "Madagascar", "Cambodia", "Chad", "Niger"))
+    
+    # Create the ggplot object for time series data
+    ggplot_object <- ggplot(data_selected, aes(x = year, y = Population..total, color = country, group = country)) +
+      geom_line() +
+      labs(x = "Year", y = "Population", title = "Population Growth Trends in Key Developing Nations: A Comparative Analysis") +
+      theme_minimal()
+    
+    # Convert ggplot to an interactive Plotly graph
+    plotly_object <- ggplotly(ggplot_object)
+    
+    # Display the interactive plot
+    plotly_object
+```
+
+## 5. Conclusion
+The insights garnered from these diverse analyses provided a strong empirical foundation for targeted policy recommendations. It became evident that a reallocation of resources—from predominantly military to more social services—could enhance child welfare significantly. Furthermore, these policies need to consider demographic trends to ensure that interventions are not only effective today but also sustainable in the long run.
+
+This multi-faceted analysis demonstrated the importance of a balanced approach in policy-making, where economic growth, security, and social welfare are integrated into a coherent strategy. For the countries analyzed, effective policy-making will require an alignment of economic reforms with proactive social policies that collectively address the immediate and future needs of their populations. Moving forward, leveraging data-driven insights will be crucial in crafting policies that are both responsive and responsible, ensuring that children in these regions have the opportunity to live healthier, more prosperous lives in a stable environment. This holistic approach is not just beneficial but necessary for fostering sustainable development and ensuring that no child is left behind as nations progress.
+
+## 6. Recommendations
+
+The comprehensive analysis presented offers a multi-dimensional view into the dynamics of child deprivation, economic decision-making, and demographic trends in selected developing countries. Through a series of visualizations and data interpretations, we've underscored the significant disparities in child welfare and the impacts of fiscal choices on social services. This deep dive into the interplay between military expenditures, economic growth, and social welfare culminates in actionable policy recommendations aimed at realigning resources towards enhancing the well-being of the most vulnerable populations. It is clear that a balanced, integrated approach in policy-making that harmonizes economic strategies with social development objectives is imperative. By embracing this methodology, these nations can ensure sustainable development and create an environment where no child is left behind, paving the way for a future where all children can thrive.
+
+
+
+
+
+
+
+
+
+
 
 
